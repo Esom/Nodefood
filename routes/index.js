@@ -12,7 +12,8 @@ router.get('/stores', catchErrors(storeController.getStores));
 router.get('/stores/:id/edit', storeController.editStore);
 router.get('/store/:slug', catchErrors(storeController.getStoreBySlug));
 
-router.get('/add', storeController.addStore);
+router.get('/add', authController.isLoggedIn, storeController.addStore);
+
 router.post('/add', storeController.upload,
   catchErrors(storeController.resize),
   catchErrors(storeController.createStore)
@@ -24,11 +25,17 @@ router.post('/add/:id', storeController.upload,
 );
 
 router.get('/login', userController.loginForm);
+router.post('/login', authController.login);
+
 router.get('/register', userController.registerForm);
+
+
 router.post('/register', userController.validateRegister, 
-  catchErrors(userController.register),
+  userController.register,
   authController.login
 );
+
+router.get('/logout', authController.logout);
 
 router.get('/tags', catchErrors(storeController.getStoreByTag));
 router.get('/tags/:tag', catchErrors(storeController.getStoreByTag));
