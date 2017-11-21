@@ -7,12 +7,14 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const promisify = require('es6-promisify');
+var LocalStrategy = require('passport-local').Strategy;
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
 const routes = require('./routes/index');
 const helpers = require('./helpers');
 const errorHandlers = require('./handlers/errorHandlers');
-
+// this enables passport to discover strategy
+require('./handlers/passport');
 // create our Express app
 const app = express();
 
