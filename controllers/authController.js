@@ -27,7 +27,6 @@ exports.isLoggedIn = (req, res, next) => {
 };
 
 exports.forgot = async (req, res) => {
-  console.log('req params '. req);
   // See if a user with that email exists
   const user = await User.findOne({email: req.body.email});
 
@@ -43,6 +42,54 @@ exports.forgot = async (req, res) => {
 
   // send user an email with the token
   const resetUrl = `http://${req.headers.host}/account/reset/${user.resetPasswordToken}`
-  req.flash('success', `You have been email a password reset link. ${resetUrl}`);
+  req.flash('success', `You have been emailed a password reset link. ${resetUrl}`);
   res.redirect('/login');
 };
+
+exports.reset = async (req, res) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+  if (!user) {
+    req.flash('error', 'Password reset is invalid or has expired');
+    return res.redirect('/login');
+  }
+  // if there is a user, show the rest password form
+  res.render('reset', { title: 'Reset your Password' });
+};
+
+exports.confirmedPasswords = (req, res, next) => {
+  if (req.body.password === req.body['password-confirm']) {
+    next(); // keepit going!
+    return;
+  }
+  req.flash('error', 'Passwords do not match!');
+  res.redirect('back');
+};
+
+exports.update = async (req, res) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    req.flash('error', 'Password reset is invalid or has expired');
+    return res.redirect('/login');
+  }
+
+  const setPassword = promisify(user.setPassword, user);
+  await setPassword(req.body.password);
+  // to clear mongodb respective fields
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  // update user
+  const updatedUser = await user.save();
+
+  // logs in user after successful update
+  await req.login(updatedUser);
+  req.flash('success', '💃 Nice! Your password has been reset! You are now logged in!');
+  res.redirect('/');
+}
