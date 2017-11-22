@@ -1,6 +1,8 @@
 extends layout
 include mixins/_loginForm
+include mixins/_forgotForm
 block content
 	.inner
 		h2= title
 		+loginForm()
+		+forgotForm()

@@ -40,6 +40,8 @@ router.get('/logout', authController.logout);
 router.get('/account', authController.isLoggedIn, userController.account);
 router.post('/account', userController.updateAccount);
 
+router.get('/account/forgot', catchErrors(authController.forgot));
+
 router.get('/tags', catchErrors(storeController.getStoreByTag));
 router.get('/tags/:tag', catchErrors(storeController.getStoreByTag));
 
