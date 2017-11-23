@@ -1,0 +1,16 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.7.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'npm:timespan:20170907':
+    - forever > timespan:
+        reason: Patch
+        expires: '2017-12-22T12:43:16.015Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - forever > forever-monitor > chokidar > fsevents > node-pre-gyp > tar-pack > debug:
+        patched: '2017-11-22T12:41:13.017Z'
+  'npm:tough-cookie:20170905':
+    - forever > forever-monitor > chokidar > fsevents > node-pre-gyp > request > tough-cookie:
+        patched: '2017-11-22T12:41:13.017Z'
