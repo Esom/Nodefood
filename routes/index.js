@@ -51,5 +51,9 @@ router.get('/tags/:tag', catchErrors(storeController.getStoreByTag));
 
 // Search api
 router.get('/api/search', catchErrors(storeController.searchStores));
+router.get('/api/stores/near', catchErrors(storeController.mapStores));
+
+// map page
+router.get('/map', storeController.mapPage);
 
 module.exports = router;
