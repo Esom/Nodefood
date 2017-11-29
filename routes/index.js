@@ -56,4 +56,7 @@ router.get('/api/stores/near', catchErrors(storeController.mapStores));
 // map page
 router.get('/map', storeController.mapPage);
 
+// like stores
+router.post('/api/stores/:id/heart', catchErrors(storeController.heartStore));
+
 module.exports = router;

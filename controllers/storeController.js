@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const User = mongoose.model('User');
 // image upload middleware
 const multer = require('multer');
 const multerOptions = {
@@ -145,4 +146,17 @@ exports.mapStores = async (req,res) => {
 
 exports.mapPage = async (req, res) => {
     res.render('map', {title: 'Maps'});
-}
+};
+
+exports.heartStore = async (req, res) => {
+    const hearts = req.user.hearts.map(obj => obj.toString());
+    // check if hearts id is the same as the id in request params
+    // $pull & $ $addToSet are mongo operators , $addToSet maintains uniqueness in an array 
+    const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet';
+    // find one user & update since hearts field does not exist yet
+    const user = await User.findByIdAndUpdate(req.user._id,
+        { [operator]: { hearts: req.params.id }},
+        { new: true }
+    );
+    res.json(user);
+};

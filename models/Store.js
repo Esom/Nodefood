@@ -49,10 +49,10 @@ storeSchema.index({
 storeSchema.index({ location: '2dsphere' });
 
 storeSchema.pre('save', async function(next) {
-	if(!this.isModified('name')) {
-		return next(); //skip it
-	}
-	this.slug = slug(this.name); 
+  if(!this.isModified('name')) {
+    return next(); //skip it
+  }
+  this.slug = slug(this.name); 
   // find stores with similar slugs
   const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`)
   // constructor is used to reference to a current models Object
