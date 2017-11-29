@@ -160,3 +160,11 @@ exports.heartStore = async (req, res) => {
     );
     res.json(user);
 };
+
+exports.getHearts = async (req, res) => {
+    const stores = await Store.find({
+        //uses the $in mongo operator to find an id in an object
+        _id: { $in: req.user.hearts }
+    });
+    res.render('stores', { title: 'Hearted Stores', stores });
+};

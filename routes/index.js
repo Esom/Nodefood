@@ -59,4 +59,6 @@ router.get('/map', storeController.mapPage);
 // like stores
 router.post('/api/stores/:id/heart', catchErrors(storeController.heartStore));
 
+// get hearted stores
+router.get('/hearts', authController.isLoggedIn, catchErrors(storeController.getHearts));
 module.exports = router;
