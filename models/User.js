@@ -23,7 +23,7 @@ const userSchema = new Schema({
       trim: true
     },
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
 });
 
 // virtualizes field
