@@ -90,7 +90,7 @@ exports.updateStore = async (req, res) => {
 
 // find store by slug
 exports.getStoreBySlug = async (req, res, next) => {
-    const store = await Store.findOne({slug: req.params.slug}).populate('author');
+    const store = await Store.findOne({ slug: req.params.slug }).populate('author reviews');
     if(!store) return next();
     res.render('store', {store, title: store.name});
 };
@@ -166,5 +166,10 @@ exports.getHearts = async (req, res) => {
         //uses the $in mongo operator to find an id in an object
         _id: { $in: req.user.hearts }
     });
-    res.render('stores', { title: 'Hearted Stores', stores });
+    res.render('stores', { stores, title: 'Hearted Stores'});
+};
+
+exports.getTopStores = async (req, res) => {
+    const stores = await Store.getTopStores();
+    res.render('topStores', { stores, title: 'Top stores based on user reviews'});
 };
